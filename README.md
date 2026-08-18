@@ -1,52 +1,52 @@
-# 📸 DocScanner Live
+# 📸 DocScanner Pro Live
 
-Aplikasi web pengimbas dokumen (Document Scanner) berkuasa tinggi dan responsif. Bina fail PDF daripada kamera atau galeri, sunting gambar, susun muka surat, dan lekatkan cop air (*watermark*) vektor yang profesional — semuanya diproses secara 100% di dalam pelayar (*browser*) anda tanpa memerlukan pelayan luar (*serverless*).
+A powerful, responsive, and serverless document scanner web application. Create PDFs from your camera or gallery, edit images, arrange page layouts, and apply professional vector watermarks — all processed 100% locally within your browser.
 
-![Paparan Antaramuka](https://via.placeholder.com/800x400.png?text=Letak+Screenshot+Aplikasi+Anda+Di+Sini)
+![UI Preview](https://via.placeholder.com/800x400.png?text=Place+Your+App+Screenshot+Here)
 
-## ✨ Ciri-Ciri Utama
+## ✨ Key Features
 
-- **📸 Kamera & Panduan Pintar:** Ambil gambar terus dari web kamera (peranti mudah alih atau PC) berserta kotak panduan ukuran dokumen sebenar (A4, Resit, & Kad Pengenalan).
-- **✂️ Pemotong Gambar Pintar (Cropping):** Integrasi pemotong gambar manual untuk memastikan hanya bahagian dokumen yang penting diambil apabila memuat naik dari galeri.
-- **🎨 Suntingan Gambar Visual:** Laras kecerahan, kontras, dan warna gambar secara manual, berserta penapis *Auto-Enhance* (Hitam & Putih) untuk teks yang lebih tajam.
-- **🗂 Susunan Pintar (Collage Layout):** Susun berbilang gambar ke dalam 1 muka surat A4. Pilihan susunan tersedia: 1 Gambar, 2 Gambar (Sesuai untuk IC), Grid 4 Gambar, dan Grid 6 Gambar. Laras skala gambar secara bebas!
-- **🔒 Cop Air Vektor (Vector Watermark):** Cop PDF anda untuk tujuan keselamatan (cth: "URUSAN BANK SAHAJA"). Sokongan tetapan saiz, warna, gaya susunan (Tengah, Bucu, Tiled/Berulang), serta kawalan kedudukan bebas (Paksi-X & Paksi-Y). Menggunakan teknologi vektor supaya saiz PDF kekal ringan (paras KB).
-- **📱 Paparan Langsung (Live Preview) Dual-Mod:** Paparan *real-time* perubahan fail PDF setiap kali tetapan diubah. Menggunakan `<iframe/>` untuk kelajuan pada Desktop, dan teknologi pengolahan kanvas **PDF.js** khas untuk menyokong peranti mudah alih (iOS & Android).
-- **⚡ Pemampatan Terbina (Auto-Compression):** Algoritma akan memampatkan saiz fail gambar yang besar (MB) menjadi kecil (KB) sebelum menukarkannya kepada format PDF.
+- **📸 Camera & Smart Guides:** Capture images directly from your webcam (mobile or PC) with real-world document dimension guides (A4, Receipts, & ID Cards).
+- **✂️ Smart Image Cropping:** Integrated manual cropper to ensure only the important parts of the document are captured when uploading from the gallery.
+- **🎨 Visual Image Editing:** Manually adjust image brightness, contrast, and saturation, along with an *Auto-Enhance* (Black & White) filter for sharper, cleaner text.
+- **🗂 Smart Layouts (Collage):** Arrange multiple images into a single A4 page. Available layouts: 1 Image, 2 Images (Ideal for ID cards), 2x2 Grid, and 2x3 Grid. Includes an image scaling slider for perfect fits!
+- **🔒 Vector Watermarks:** Watermark your PDFs for security purposes (e.g., "FOR BANK USE ONLY"). Supports adjustments for size, color, style (Center, Corners, Tiled/Pattern), and free positioning (X & Y Axis). Utilizes native vector text to ensure the PDF file size remains extremely light (in KBs).
+- **📱 Dual-Mode Live Preview:** Real-time preview of your PDF whenever settings are adjusted. Uses an `<iframe/>` for speed on Desktops, and a custom **PDF.js** canvas rendering engine to fully support mobile browsers (iOS & Android).
+- **⚡ Auto-Compression:** A built-in algorithm compresses large image files (MBs) down to a fraction of their size (KBs) before converting them to a PDF.
 
-## 🛡️ Privasi & Keselamatan Data
+## 🛡️ Privacy & Data Security
 
-Aplikasi ini dibina dengan prinsip keselamatan pihak klien (*Client-Side Rendering*). 
-**Tiada sebarang data, gambar, atau dokumen sulit yang diimbas akan dihantar atau disimpan di mana-mana pelayan / awan (cloud).** Segala pemprosesan memori, manipulasi gambar, dan penjanaan fail PDF berlaku sepenuhnya di dalam peranti anda sendiri (Sokongan penggunaan *Offline* / Tanpa Internet selepas dimuat turun).
+This application is built on the principle of Client-Side Rendering. 
+**No sensitive data, images, or scanned documents are sent to or stored on any external server or cloud.** All processing, image manipulation, and PDF generation occur entirely within your own device. (It even supports Offline usage once loaded).
 
-## 🚀 Teknologi / *Tech Stack*
+## 🚀 Tech Stack
 
-Projek ini dibina secara natif tanpa sebarang kerangka berat (Vanilla JS), namun dikuasakan oleh perpustakaan JavaScript yang dioptimumkan:
+This project is built natively using Vanilla JS, powered by highly-optimized JavaScript libraries:
 
-*   **Antaramuka (UI):** HTML5 & [Tailwind CSS](https://tailwindcss.com/)
-*   **Pemotong Gambar:** [Cropper.js](https://fengyuanchen.github.io/cropperjs/)
-*   **Pemampat Imej:** [browser-image-compression](https://www.npmjs.com/package/browser-image-compression)
-*   **Penjana PDF:** [jsPDF](https://parall.ax/products/jspdf)
-*   **Pemaparan Mobile PDF:** [PDF.js (Mozilla)](https://mozilla.github.io/pdf.js/)
+*   **UI/Styling:** HTML5 & [Tailwind CSS](https://tailwindcss.com/)
+*   **Image Cropping:** [Cropper.js](https://fengyuanchen.github.io/cropperjs/)
+*   **Image Compression:** [browser-image-compression](https://www.npmjs.com/package/browser-image-compression)
+*   **PDF Generator:** [jsPDF](https://parall.ax/products/jspdf)
+*   **Mobile PDF Rendering:** [PDF.js (Mozilla)](https://mozilla.github.io/pdf.js/)
 
-## 💻 Cara Penggunaan (Pemasangan)
+## 💻 Usage & Installation
 
-Kerana ia adalah aplikasi *Client-Side* sepenuhnya, tiada *NPM Install* atau persediaan pangkalan data (*database setup*) diperlukan.
+Because it is a fully client-side application, no *NPM Install*, local server, or database setup is required.
 
-1. Muat turun repo atau klon (*clone*) projek ini.
-2. Pastikan anda mempunyai ketiga-tiga fail ini di dalam satu folder:
+1. Download the repo or clone this project.
+2. Ensure you have these three files together in the same directory:
    - `index.html`
    - `style.css`
    - `script.js`
-3. Buka fail `index.html` menggunakan mana-mana pelayar sesawang moden (Chrome, Safari, Edge, Firefox).
-4. Sedia untuk mengimbas dokumen!
+3. Open the `index.html` file using any modern web browser (Chrome, Safari, Edge, Firefox).
+4. You are ready to scan documents!
 
-*(Nota: Fungsi Kamera mungkin memerlukan persekitaran selamat / HTTPS jika dihoskan pada pelayan web sebenar).*
+*(Note: Modern browsers require a secure context (HTTPS or localhost) for the Camera API to work).*
 
-## 🤝 Sumbangan (Contributing)
+## 🤝 Contributing
 
-Sumbangan daripada komuniti amat dialu-alukan! Sama ada ia pembaikan pepijat (*bug fix*), penambahan ciri baharu, atau sekadar memperbaiki antaramuka. Sila buka *Issue* atau hantar *Pull Request*.
+Contributions from the community are highly welcomed! Whether it's a bug fix, adding new features, or just improving the UI. Feel free to open an *Issue* or submit a *Pull Request*.
 
-## 📝 Lesen
+## 📝 License
 
-Projek ini dilesenkan di bawah [MIT License](LICENSE). Anda bebas untuk menggunakan, mengubah suai, dan mengedarkan perisian ini.
+This project is licensed under the [MIT License](LICENSE). You are free to use, modify, and distribute this software.
