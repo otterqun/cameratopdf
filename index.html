@@ -4,24 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DocScanner Mudah</title>
-   
+    
     <!-- Panggil Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-   
+    
+    <!-- Panggil Library Cropper.js (Untuk Manual Crop) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+    
     <!-- Panggil Library Kompresi Gambar -->
     <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.1/dist/browser-image-compression.js"></script>
-   
+    
     <!-- Panggil Library jsPDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body class="bg-gray-200 min-h-screen p-4 font-sans relative">
 
-
     <div class="max-w-md mx-auto bg-white p-6 rounded-xl shadow-md mt-5">
         <h1 class="text-2xl font-bold text-center mb-6">📸 Scanner Mudah</h1>
 
-
-        <!-- DUA BUTANG: KAMERA & GALERI -->
         <div class="grid grid-cols-2 gap-3 mb-4">
             <button id="btnOpenCamera" class="w-full bg-blue-600 text-white text-center font-bold py-3 rounded-lg cursor-pointer hover:bg-blue-700 shadow-sm transition">
                 📸 Kamera
@@ -32,19 +33,14 @@
             </label>
         </div>
 
-
-        <!-- AUTO ENHANCE -->
         <div class="mb-4 flex items-center bg-yellow-50 p-3 rounded border border-yellow-200">
             <input type="checkbox" id="autoEnhance" class="w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500" checked>
             <label for="autoEnhance" class="ml-2 text-sm font-bold text-gray-700">✨ Auto-Enhance Teks (B&W)</label>
         </div>
 
-
-        <!-- RUANGAN PAPARAN -->
         <div id="previewContainer" class="hidden">
             <h2 class="text-md font-semibold text-gray-700 mb-2 mt-2">Muka Surat:</h2>
             <div id="imageList" class="grid grid-cols-2 gap-3 mb-4"></div>
-
 
             <div class="bg-blue-50 border border-blue-100 p-3 rounded-lg mb-6 text-sm text-gray-700 shadow-sm">
                 <div class="flex justify-between mb-1">
@@ -61,22 +57,75 @@
                 </div>
             </div>
 
+            <!-- FUNGSI BARU: Pilihan Susunan (Collage) -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Susunan (Collage):</label>
+                <select id="pdfLayoutSelect" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                    <option value="1">1 Gambar - 1 Muka Surat (Lalai)</option>
+                    <option value="2">2 Gambar - 1 Muka Surat</option>
+                    <option value="4">4 Gambar - 1 Muka Surat (Grid 2x2)</option>
+                    <option value="6">6 Gambar - 1 Muka Surat (Grid 2x3)</option>
+                </select>
+            </div>
 
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Nama Fail PDF:</label>
                 <input type="text" id="fileNameInput" placeholder="Contoh: Resit_Klinik" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
             </div>
 
-
-            <button id="btnPdf" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 shadow-sm transition">
-                ⬇️ Muat Turun PDF
-            </button>
+            <!-- DUA BUTANG: PRATONTON & MUAT TURUN -->
+            <div class="flex gap-2">
+                <button id="btnPreviewPdf" class="w-1/3 bg-gray-600 text-white font-bold py-3 rounded-lg hover:bg-gray-700 shadow-sm transition flex items-center justify-center">
+                    👁️ Lihat
+                </button>
+                <button id="btnPdf" class="w-2/3 bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 shadow-sm transition flex items-center justify-center">
+                    ⬇️ Muat Turun PDF
+                </button>
+            </div>
         </div>
-
 
         <p id="loadingText" class="text-center text-blue-500 font-semibold hidden mt-2 z-50 relative">Sedang memproses...</p>
     </div>
 
+    <!-- MODAL PRATONTON PDF (PDF VIEWER) -->
+    <div id="pdfPreviewModal" class="fixed inset-0 z-[80] hidden bg-black bg-opacity-90 flex flex-col items-center justify-center p-4">
+        <div class="w-full max-w-4xl bg-gray-900 rounded-xl overflow-hidden flex flex-col" style="height: 90vh;">
+            <div class="p-4 bg-gray-800 text-white flex justify-between items-center">
+                <h3 class="font-bold">📄 Pratonton PDF</h3>
+                <button onclick="closePdfPreviewModal()" class="text-gray-400 hover:text-red-500 font-bold text-xl">✕</button>
+            </div>
+            
+            <div class="flex-1 bg-white overflow-hidden relative">
+                <!-- iFrame untuk memaparkan PDF -->
+                <iframe id="pdfPreviewFrame" class="w-full h-full border-0"></iframe>
+            </div>
+            
+            <div class="p-4 bg-gray-800">
+                <button id="btnDownloadFromPreview" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 shadow-sm transition">
+                    ⬇️ Muat Turun Sekarang
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL MANUAL CROP (UNTUK GALERI) -->
+    <div id="cropModal" class="fixed inset-0 z-[70] hidden bg-black bg-opacity-90 flex flex-col items-center justify-center p-4">
+        <div class="w-full max-w-lg bg-gray-900 rounded-xl overflow-hidden flex flex-col" style="height: 85vh;">
+            <div class="p-4 bg-gray-800 text-white flex justify-between items-center">
+                <h3 class="font-bold">✂️ Potong Gambar</h3>
+                <button onclick="closeCropModal()" class="text-gray-400 hover:text-red-500 font-bold text-xl">✕</button>
+            </div>
+            
+            <div class="flex-1 bg-black overflow-hidden flex items-center justify-center relative">
+                <img id="cropImageTarget" src="" class="max-w-full max-h-full block">
+            </div>
+            
+            <div class="p-4 bg-gray-800 flex gap-3">
+                <button onclick="closeCropModal()" class="px-4 py-3 bg-red-600 text-white rounded-lg font-bold w-1/3 hover:bg-red-700">Batal</button>
+                <button id="btnConfirmCrop" class="px-4 py-3 bg-green-600 text-white rounded-lg font-bold w-2/3 hover:bg-green-700">Sahkan & Proses</button>
+            </div>
+        </div>
+    </div>
 
     <!-- MODAL KAMERA LANGSUNG (LIVE WEBCAM) -->
     <div id="liveCameraModal" class="fixed inset-0 z-50 hidden bg-black flex flex-col items-center justify-center">
@@ -86,7 +135,6 @@
                 <button class="guide-btn bg-gray-700 text-white px-4 py-2 rounded-full text-sm font-bold shadow transition" data-type="resit">Resit</button>
                 <button class="guide-btn bg-gray-700 text-white px-4 py-2 rounded-full text-sm font-bold shadow transition" data-type="id">Kad IC</button>
             </div>
-
 
             <div class="relative flex-1 flex items-center justify-center overflow-hidden">
                 <video id="videoElement" class="absolute w-full h-full object-cover" autoplay playsinline></video>
@@ -98,14 +146,12 @@
                 </div>
             </div>
 
-
             <div class="p-6 pb-10 flex gap-4 bg-gradient-to-t from-black to-transparent w-full justify-center z-10">
                 <button id="btnCloseCamera" class="px-6 py-4 bg-red-600 text-white rounded-full font-bold shadow-lg hover:bg-red-700">Batal</button>
                 <button id="btnCaptureFrame" class="px-8 py-4 bg-white text-black rounded-full font-bold shadow-[0_0_20px_rgba(255,255,255,0.7)] hover:bg-gray-200">📸 Tangkap</button>
             </div>
         </div>
     </div>
-
 
     <!-- MODAL EDIT GAMBAR (MANUAL ADJUSTMENT) -->
     <div id="editModal" class="fixed inset-0 z-[60] hidden bg-black bg-opacity-80 flex items-center justify-center p-4">
@@ -114,14 +160,12 @@
                 <h3 class="font-bold text-gray-800">🎨 Edit Gambar</h3>
                 <button onclick="closeEditModal()" class="text-gray-500 hover:text-red-500 font-bold text-xl">✕</button>
             </div>
-           
+            
             <div class="p-4 flex-1 overflow-y-auto">
-                <!-- Ruangan Preview Live -->
                 <div class="bg-gray-800 rounded-lg h-48 mb-6 flex items-center justify-center overflow-hidden relative shadow-inner">
                     <img id="editPreviewImage" class="max-h-full object-contain transition-all duration-75" src="">
                 </div>
-               
-                <!-- Sliders Kawalan -->
+                
                 <div class="space-y-5 text-sm font-medium text-gray-700">
                     <div>
                         <div class="flex justify-between mb-1">
@@ -146,14 +190,13 @@
                     </div>
                 </div>
             </div>
-           
+            
             <div class="p-4 border-t flex gap-2 bg-gray-50">
                 <button onclick="resetEdits()" class="px-4 py-3 bg-gray-200 text-gray-800 rounded-lg font-bold w-1/3 hover:bg-gray-300 transition">Reset</button>
-                <button onclick="saveEdits()" class="px-4 py-3 bg-blue-600 text-white rounded-lg font-bold w-2/3 hover:bg-blue-700 transition shadow">Terapkan (Apply)</button>
+                <button onclick="saveEdits()" class="px-4 py-3 bg-blue-600 text-white rounded-lg font-bold w-2/3 hover:bg-blue-700 transition shadow">Terapkan</button>
             </div>
         </div>
     </div>
-
 
     <!-- MODAL PAPARAN GAMBAR PENUH (VIEWER) -->
     <div id="imageModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-80 flex items-center justify-center p-4">
@@ -163,34 +206,43 @@
         </div>
     </div>
 
-
     <script>
         let scannedImages = [];
-        let readyPdfBlob = null;
-        let videoStream = null;
-        let currentEditIndex = null; // Menyimpan ID gambar yang sedang diedit
-       
+        let readyPdfBlob = null; 
+        let currentPdfUrl = null; // Menyimpan URL PDF sementara
+        let videoStream = null; 
+        let currentEditIndex = null; 
+        
+        let cropperInstance = null;
+        let originalSelectedFilename = ""; 
+
         const galleryInput = document.getElementById('galleryInput');
         const btnOpenCamera = document.getElementById('btnOpenCamera');
         const autoEnhanceCheckbox = document.getElementById('autoEnhance');
-       
+        const pdfLayoutSelect = document.getElementById('pdfLayoutSelect');
+        
         const previewContainer = document.getElementById('previewContainer');
         const imageList = document.getElementById('imageList');
+        
+        const btnPreviewPdf = document.getElementById('btnPreviewPdf');
         const btnPdf = document.getElementById('btnPdf');
+        
         const loadingText = document.getElementById('loadingText');
         const fileNameInput = document.getElementById('fileNameInput');
-       
+        
         const imageModal = document.getElementById('imageModal');
         const modalImage = document.getElementById('modalImage');
 
+        // Elemen Modal Pratonton PDF
+        const pdfPreviewModal = document.getElementById('pdfPreviewModal');
+        const pdfPreviewFrame = document.getElementById('pdfPreviewFrame');
+        const btnDownloadFromPreview = document.getElementById('btnDownloadFromPreview');
 
         const liveCameraModal = document.getElementById('liveCameraModal');
         const videoElement = document.getElementById('videoElement');
         const btnCloseCamera = document.getElementById('btnCloseCamera');
         const btnCaptureFrame = document.getElementById('btnCaptureFrame');
 
-
-        // Elemen Edit Modal
         const editModal = document.getElementById('editModal');
         const editPreviewImage = document.getElementById('editPreviewImage');
         const sliderBrightness = document.getElementById('sliderBrightness');
@@ -200,10 +252,12 @@
         const valContrastLabel = document.getElementById('valContrastLabel');
         const valSaturationLabel = document.getElementById('valSaturationLabel');
 
+        const cropModal = document.getElementById('cropModal');
+        const cropImageTarget = document.getElementById('cropImageTarget');
+        const btnConfirmCrop = document.getElementById('btnConfirmCrop');
 
         const cameraGuide = document.getElementById('cameraGuide');
         const guideBtns = document.querySelectorAll('.guide-btn');
-
 
         guideBtns.forEach(btn => {
             btn.addEventListener('click', (e) => {
@@ -214,13 +268,12 @@
                 e.target.classList.remove('bg-gray-700', 'text-white');
                 e.target.classList.add('bg-yellow-500', 'text-black');
 
-
                 const type = e.target.dataset.type;
                 if (type === 'a4') {
-                    cameraGuide.style.aspectRatio = '1 / 1.414';
+                    cameraGuide.style.aspectRatio = '1 / 1.414'; 
                     cameraGuide.style.width = '85%';
                 } else if (type === 'resit') {
-                    cameraGuide.style.aspectRatio = '1 / 2.5';  
+                    cameraGuide.style.aspectRatio = '1 / 2.5';   
                     cameraGuide.style.width = '45%';
                 } else if (type === 'id') {
                     cameraGuide.style.aspectRatio = '1.58 / 1';  
@@ -229,6 +282,7 @@
             });
         });
 
+        pdfLayoutSelect.addEventListener('change', calculateActualPdfSize);
 
         function formatBytes(bytes, decimals = 2) {
             if (!+bytes) return '0 Bytes';
@@ -239,37 +293,32 @@
             return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
         }
 
-
         async function enhanceImage(file) {
             return new Promise((resolve) => {
                 const img = new Image();
                 const url = URL.createObjectURL(file);
-               
+                
                 img.onload = () => {
                     const canvas = document.createElement('canvas');
                     canvas.width = img.width;
                     canvas.height = img.height;
                     const ctx = canvas.getContext('2d');
 
-
                     ctx.filter = 'grayscale(100%) contrast(160%) brightness(110%)';
                     ctx.drawImage(img, 0, 0);
-
 
                     canvas.toBlob((blob) => {
                         const enhancedFile = new File([blob], file.name, { type: 'image/jpeg' });
                         URL.revokeObjectURL(url);
                         resolve(enhancedFile);
-                    }, 'image/jpeg', 0.7);
+                    }, 'image/jpeg', 0.7); 
                 };
                 img.src = url;
             });
         }
 
-
         async function processImageFile(file) {
             loadingText.classList.remove('hidden');
-
 
             try {
                 let fileToProcess = file;
@@ -278,34 +327,30 @@
                     fileToProcess = await enhanceImage(file);
                 }
 
-
                 loadingText.innerText = "Memproses gambar...";
                 const options = { maxSizeMB: 1, maxWidthOrHeight: 1920, useWebWorker: true };
                 const compressedFile = await imageCompression(fileToProcess, options);
-               
-                // Simpan URL asas untuk rujukan edit manual nanti
+                
                 const baseUrl = URL.createObjectURL(compressedFile);
                 const activeUrl = URL.createObjectURL(compressedFile);
-
 
                 const imgElement = new Image();
                 imgElement.src = baseUrl;
                 await new Promise((resolve) => { imgElement.onload = resolve; });
 
-
-                scannedImages.push({
-                    baseFile: compressedFile,                   // Fail asal tanpa edit manual
-                    baseUrl: baseUrl,                           // URL untuk fail asal
-                    file: compressedFile,                       // Fail yang dipaparkan sekarang
-                    url: activeUrl,                             // URL yang dipaparkan sekarang
+                scannedImages.push({ 
+                    baseFile: compressedFile,                   
+                    baseUrl: baseUrl,                           
+                    file: compressedFile,                       
+                    url: activeUrl,                             
                     fileName: file.name || `Gambar_${Date.now()}.jpg`,                        
-                    rawOriginalSize: file.size,                
-                    rawCompressedSize: compressedFile.size,    
+                    rawOriginalSize: file.size,                 
+                    rawCompressedSize: compressedFile.size,     
                     originalSize: formatBytes(file.size),          
                     compressedSize: formatBytes(compressedFile.size),
-                    imgWidth: imgElement.width,
+                    imgWidth: imgElement.width, 
                     imgHeight: imgElement.height,
-                    filters: { brightness: 100, contrast: 100, saturation: 100 } // Status slider lalai
+                    filters: { brightness: 100, contrast: 100, saturation: 100 } 
                 });
                 renderImages();
             } catch (error) {
@@ -313,37 +358,71 @@
                 console.error(error);
             } finally {
                 loadingText.classList.add('hidden');
-                loadingText.innerText = "Sedang memproses gambar...";
+                loadingText.innerText = "Sedang memproses..."; 
             }
         }
-
 
         galleryInput.addEventListener('change', (event) => {
             const file = event.target.files[0];
             if (file) {
-                processImageFile(file);
-                event.target.value = '';
+                originalSelectedFilename = file.name;
+                const tempUrl = URL.createObjectURL(file);
+                
+                cropImageTarget.src = tempUrl;
+                cropModal.classList.remove('hidden');
+                
+                if (cropperInstance) { cropperInstance.destroy(); }
+                
+                setTimeout(() => {
+                    cropperInstance = new Cropper(cropImageTarget, {
+                        viewMode: 2, 
+                        autoCropArea: 0.9, 
+                        background: false
+                    });
+                }, 100); 
+                
+                event.target.value = ''; 
             }
         });
 
+        btnConfirmCrop.addEventListener('click', () => {
+            if (!cropperInstance) return;
+            
+            const croppedCanvas = cropperInstance.getCroppedCanvas({
+                maxWidth: 4096, 
+                maxHeight: 4096,
+            });
+
+            croppedCanvas.toBlob((blob) => {
+                const croppedFile = new File([blob], originalSelectedFilename || `Crop_${Date.now()}.jpg`, { type: 'image/jpeg' });
+                processImageFile(croppedFile);
+                closeCropModal();
+            }, 'image/jpeg', 0.95);
+        });
+
+        window.closeCropModal = function() {
+            cropModal.classList.add('hidden');
+            if (cropperInstance) {
+                cropperInstance.destroy();
+                cropperInstance = null;
+            }
+            cropImageTarget.src = '';
+        };
 
         btnOpenCamera.addEventListener('click', async () => {
             try {
-                // Resolusi diturunkan ke 1080p (Full HD) supaya tidak lag
                 const constraints = {
-                    video: {
+                    video: { 
                         facingMode: 'environment',
-                        width: { ideal: 1920 },  // Full HD (Lebar)
-                        height: { ideal: 1080 }, // Full HD (Tinggi)
-                        advanced: [{ focusMode: "continuous" }]
+                        width: { ideal: 1920 },  
+                        height: { ideal: 1080 }, 
+                        advanced: [{ focusMode: "continuous" }] 
                     }
                 };
-
-
                 videoStream = await navigator.mediaDevices.getUserMedia(constraints);
                 videoElement.srcObject = videoStream;
                 liveCameraModal.classList.remove('hidden');
-               
+                
             } catch (err) {
                 try {
                     videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
@@ -356,7 +435,6 @@
             }
         });
 
-
         function stopCamera() {
             if (videoStream) {
                 videoStream.getTracks().forEach(track => track.stop());
@@ -365,9 +443,7 @@
             liveCameraModal.classList.add('hidden');
         }
 
-
         btnCloseCamera.addEventListener('click', stopCamera);
-
 
         btnCaptureFrame.addEventListener('click', () => {
             const videoWidth = videoElement.videoWidth;
@@ -375,40 +451,35 @@
             const videoRect = videoElement.getBoundingClientRect();
             const guideRect = cameraGuide.getBoundingClientRect();
 
-
             const scale = Math.max(videoRect.width / videoWidth, videoRect.height / videoHeight);
             const renderedWidth = videoWidth * scale;
             const renderedHeight = videoHeight * scale;
             const offsetX = (renderedWidth - videoRect.width) / 2;
             const offsetY = (renderedHeight - videoRect.height) / 2;
 
-
             const guideLeft = guideRect.left - videoRect.left;
             const guideTop = guideRect.top - videoRect.top;
-
 
             const cropX = (guideLeft + offsetX) / scale;
             const cropY = (guideTop + offsetY) / scale;
             const cropWidth = guideRect.width / scale;
             const cropHeight = guideRect.height / scale;
 
-
             const canvas = document.createElement('canvas');
             canvas.width = cropWidth;
             canvas.height = cropHeight;
             const ctx = canvas.getContext('2d');
-           
+            
             ctx.drawImage(videoElement, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
-           
+            
             canvas.toBlob((blob) => {
                 if (blob) {
                     const file = new File([blob], `Kamera_${Date.now()}.jpg`, { type: "image/jpeg" });
                     processImageFile(file);
-                    stopCamera();
+                    stopCamera(); 
                 }
-            }, 'image/jpeg', 1.0);
+            }, 'image/jpeg', 1.0); 
         });
-
 
         function renderImages() {
             if (scannedImages.length > 0) {
@@ -419,33 +490,28 @@
                 return;
             }
 
-
-            imageList.innerHTML = '';
+            imageList.innerHTML = ''; 
             let totalOrig = 0;
             let totalComp = 0;
-
 
             scannedImages.forEach((img, index) => {
                 totalOrig += img.rawOriginalSize;
                 totalComp += img.rawCompressedSize;
 
-
                 const imgDiv = document.createElement('div');
                 imgDiv.className = 'relative border rounded-lg overflow-hidden shadow-sm flex flex-col bg-gray-50';
-               
+                
                 imgDiv.innerHTML = `
                     <div class="relative group cursor-pointer" onclick="openImageModal('${img.url}')">
                         <img src="${img.url}" class="w-full h-32 object-cover transition duration-300 group-hover:opacity-70">
                         <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 pointer-events-none">
                             <span class="bg-black bg-opacity-60 text-white text-xs px-3 py-1 rounded-full">🔍 Lihat</span>
                         </div>
-                       
-                        <!-- Butang Buang -->
+                        
                         <button onclick="event.stopPropagation(); removeImage(${index})" class="absolute top-1 right-1 bg-red-500 hover:bg-red-600 transition text-white rounded-full w-7 h-7 flex items-center justify-center text-xs shadow z-10">✕</button>
-                       
-                        <!-- BUTANG BARU: Butang Edit (Manual Adjustment) -->
+                        
                         <button onclick="event.stopPropagation(); openEditModal(${index})" class="absolute top-1 right-9 bg-blue-500 hover:bg-blue-600 transition text-white rounded-full w-7 h-7 flex items-center justify-center text-xs shadow z-10">🎨</button>
-                       
+                        
                         <div class="absolute top-1 left-1 bg-black bg-opacity-60 text-white text-xs px-2 py-0.5 rounded z-10">${index + 1}</div>
                     </div>
                     <div class="p-2 text-xs text-gray-700 flex flex-col gap-1 border-t">
@@ -457,46 +523,38 @@
                 imageList.appendChild(imgDiv);
             });
 
-
             document.getElementById('totalOriginal').innerText = formatBytes(totalOrig);
             document.getElementById('totalCompressed').innerText = formatBytes(totalComp);
-           
+            
             calculateActualPdfSize();
         }
 
-
         window.removeImage = function(index) {
-            URL.revokeObjectURL(scannedImages[index].url);
+            URL.revokeObjectURL(scannedImages[index].url); 
             scannedImages.splice(index, 1);
             renderImages();
         };
 
-
-        // --- FUNGSI PANEL EDIT (MANUAL) ---
         window.openEditModal = function(index) {
             currentEditIndex = index;
             const imgData = scannedImages[index];
-           
-            // Masukkan nilai slider yang tersimpan
+            
             sliderBrightness.value = imgData.filters.brightness;
             sliderContrast.value = imgData.filters.contrast;
             sliderSaturation.value = imgData.filters.saturation;
-           
+            
             updateEditLabels();
-           
-            // Paparkan gambar ASAL (base) supaya filter tak bertindih
+            
             editPreviewImage.src = imgData.baseUrl;
             applyCssFilterToPreview();
-           
+            
             editModal.classList.remove('hidden');
         };
-
 
         window.closeEditModal = function() {
             editModal.classList.add('hidden');
             currentEditIndex = null;
         };
-
 
         function updateEditLabels() {
             valBrightnessLabel.innerText = sliderBrightness.value + '%';
@@ -504,24 +562,19 @@
             valSaturationLabel.innerText = sliderSaturation.value + '%';
         }
 
-
         function applyCssFilterToPreview() {
             const b = sliderBrightness.value;
             const c = sliderContrast.value;
             const s = sliderSaturation.value;
-            // Preview secara 'Live' guna CSS Filter
             editPreviewImage.style.filter = `brightness(${b}%) contrast(${c}%) saturate(${s}%)`;
         }
 
-
-        // Dengar pergerakan slider secara langsung
         [sliderBrightness, sliderContrast, sliderSaturation].forEach(slider => {
             slider.addEventListener('input', () => {
                 updateEditLabels();
                 applyCssFilterToPreview();
             });
         });
-
 
         window.resetEdits = function() {
             sliderBrightness.value = 100;
@@ -531,24 +584,21 @@
             applyCssFilterToPreview();
         };
 
-
         window.saveEdits = async function() {
             if (currentEditIndex === null) return;
-           
+            
             const b = sliderBrightness.value;
             const c = sliderContrast.value;
             const s = sliderSaturation.value;
             const imgData = scannedImages[currentEditIndex];
-           
-            // Simpan posisi slider terbaru
+            
             imgData.filters = { brightness: b, contrast: c, saturation: s };
-           
+            
             loadingText.innerText = "Menyimpan suntingan...";
             loadingText.classList.remove('hidden');
             editModal.classList.add('hidden');
-           
+            
             try {
-                // Terapkan filter terus ke dalam Canvas supaya kekal bila masuk PDF
                 const img = new Image();
                 img.onload = async () => {
                     const canvas = document.createElement('canvas');
@@ -556,121 +606,159 @@
                     canvas.height = img.height;
                     const ctx = canvas.getContext('2d');
 
-
                     ctx.filter = `brightness(${b}%) contrast(${c}%) saturate(${s}%)`;
                     ctx.drawImage(img, 0, 0);
 
-
                     canvas.toBlob(async (blob) => {
                         const editedFile = new File([blob], imgData.fileName, { type: 'image/jpeg' });
-                       
-                        // Kompres semula fail yang baru diedit supaya PDF tak membengkak
+                        
                         const options = { maxSizeMB: 1, maxWidthOrHeight: 1920, useWebWorker: true };
                         const finalCompressed = await imageCompression(editedFile, options);
-                       
-                        // Kemas kini data gambar di UI
-                        URL.revokeObjectURL(imgData.url); // Bebaskan memori URL lama
+                        
+                        URL.revokeObjectURL(imgData.url); 
                         const newUrl = URL.createObjectURL(finalCompressed);
-                       
+                        
                         imgData.file = finalCompressed;
                         imgData.url = newUrl;
                         imgData.rawCompressedSize = finalCompressed.size;
                         imgData.compressedSize = formatBytes(finalCompressed.size);
-                       
+                        
                         loadingText.classList.add('hidden');
-                        renderImages(); // Kemas kini UI dan kira saiz PDF baru
-                       
-                    }, 'image/jpeg', 0.85); // Kualiti selamat sebelum dikompres semula
+                        renderImages(); 
+                        
+                    }, 'image/jpeg', 0.85); 
                 };
-                img.src = imgData.baseUrl; // Baca dari gambar asas
+                img.src = imgData.baseUrl; 
             } catch (error) {
                 console.error(error);
                 loadingText.classList.add('hidden');
             }
         };
 
-
-        // --- FUNGSI MODAL PAPARAN ---
         window.openImageModal = function(imageUrl) {
             modalImage.src = imageUrl;
             imageModal.classList.remove('hidden');
         };
 
-
         window.closeImageModal = function() {
             imageModal.classList.add('hidden');
-            setTimeout(() => { modalImage.src = ''; }, 300);
+            setTimeout(() => { modalImage.src = ''; }, 300); 
         };
-
 
         imageModal.addEventListener('click', function(event) {
             if (event.target === imageModal) closeImageModal();
         });
 
-
-        // --- FUNGSI JANA PDF ---
+        // --- SISTEM KIRA PDF ---
         function calculateActualPdfSize() {
+            if (scannedImages.length === 0) return;
+
             document.getElementById('finalPdfSize').innerText = "Mengira...";
             btnPdf.innerText = "⏳ Memproses...";
             btnPdf.disabled = true;
             btnPdf.classList.add('opacity-70');
-
+            
+            btnPreviewPdf.disabled = true;
+            btnPreviewPdf.classList.add('opacity-70');
 
             setTimeout(() => {
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+                
                 const pageWidth = pdf.internal.pageSize.getWidth();
                 const pageHeight = pdf.internal.pageSize.getHeight();
+                const margin = 15;  
+                const spacing = 10; 
 
+                const layoutType = parseInt(pdfLayoutSelect.value);
+                let cols = 1, rows = 1;
+
+                if (layoutType === 2) { cols = 1; rows = 2; }
+                else if (layoutType === 4) { cols = 2; rows = 2; }
+                else if (layoutType === 6) { cols = 2; rows = 3; }
 
                 for (let i = 0; i < scannedImages.length; i++) {
-                    if (i > 0) pdf.addPage();
+                    const positionOnPage = i % (cols * rows);
+                    
+                    if (positionOnPage === 0 && i > 0) {
+                        pdf.addPage();
+                    }
 
+                    const colIndex = positionOnPage % cols;
+                    const rowIndex = Math.floor(positionOnPage / cols);
+
+                    const cellWidth = (pageWidth - (margin * 2) - (spacing * (cols - 1))) / cols;
+                    const cellHeight = (pageHeight - (margin * 2) - (spacing * (rows - 1))) / rows;
+
+                    const cellX = margin + (colIndex * (cellWidth + spacing));
+                    const cellY = margin + (rowIndex * (cellHeight + spacing));
 
                     const imgWidth = scannedImages[i].imgWidth;
                     const imgHeight = scannedImages[i].imgHeight;
 
-
-                    const ratio = Math.min(pageWidth / imgWidth, pageHeight / imgHeight);
+                    const ratio = Math.min(cellWidth / imgWidth, cellHeight / imgHeight);
                     const newWidth = imgWidth * ratio;
                     const newHeight = imgHeight * ratio;
-                    const x = (pageWidth - newWidth) / 2;
-                    const y = (pageHeight - newHeight) / 2;
+                    
+                    const finalX = cellX + (cellWidth - newWidth) / 2;
+                    const finalY = cellY + (cellHeight - newHeight) / 2;
 
-
-                    pdf.addImage(scannedImages[i].url, "JPEG", x, y, newWidth, newHeight);
+                    pdf.addImage(scannedImages[i].url, "JPEG", finalX, finalY, newWidth, newHeight);
                 }
 
-
                 readyPdfBlob = pdf.output('blob');
+                
+                // Kemas kini URL PDF sementara (untuk fungsi pratonton)
+                if (currentPdfUrl) { URL.revokeObjectURL(currentPdfUrl); }
+                currentPdfUrl = URL.createObjectURL(readyPdfBlob);
+                
                 document.getElementById('finalPdfSize').innerText = formatBytes(readyPdfBlob.size);
-               
+                
                 btnPdf.innerText = "⬇️ Muat Turun PDF";
                 btnPdf.disabled = false;
                 btnPdf.classList.remove('opacity-70');
-            }, 100);
+                
+                btnPreviewPdf.disabled = false;
+                btnPreviewPdf.classList.remove('opacity-70');
+                
+            }, 100); 
         }
 
+        // --- FUNGSI PRATONTON (PREVIEW PDF) ---
+        btnPreviewPdf.addEventListener('click', function() {
+            if (!currentPdfUrl) return;
+            pdfPreviewFrame.src = currentPdfUrl;
+            pdfPreviewModal.classList.remove('hidden');
+        });
 
-        btnPdf.addEventListener('click', function() {
-            if (!readyPdfBlob) return;
+        window.closePdfPreviewModal = function() {
+            pdfPreviewModal.classList.add('hidden');
+            pdfPreviewFrame.src = ''; // Bersihkan iframe untuk elak lambat
+        };
 
+        // --- FUNGSI MUAT TURUN PDF (Utama & Dari Preview) ---
+        function executePdfDownload() {
+            if (!currentPdfUrl) return;
 
             let customFileName = fileNameInput.value.trim();
             if (customFileName === "") customFileName = "Dokumen_Scan";
             if (!customFileName.toLowerCase().endsWith('.pdf')) customFileName += ".pdf";
 
-
-            const pdfUrl = URL.createObjectURL(readyPdfBlob);
             const a = document.createElement('a');
-            a.href = pdfUrl;
+            a.href = currentPdfUrl;
             a.download = customFileName;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-           
-            setTimeout(() => URL.revokeObjectURL(pdfUrl), 1000);
+        }
+
+        btnPdf.addEventListener('click', executePdfDownload);
+        
+        btnDownloadFromPreview.addEventListener('click', function() {
+            executePdfDownload();
+            closePdfPreviewModal(); // Tutup modal lepas muat turun
         });
+
     </script>
 </body>
 </html>
