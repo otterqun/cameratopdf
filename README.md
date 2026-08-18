@@ -29,24 +29,4 @@ This project is built natively using Vanilla JS, powered by highly-optimized Jav
 *   **PDF Generator:** [jsPDF](https://parall.ax/products/jspdf)
 *   **Mobile PDF Rendering:** [PDF.js (Mozilla)](https://mozilla.github.io/pdf.js/)
 
-## 💻 Usage & Installation
-
-Because it is a fully client-side application, no *NPM Install*, local server, or database setup is required.
-
-1. Download the repo or clone this project.
-2. Ensure you have these three files together in the same directory:
-   - `index.html`
-   - `style.css`
-   - `script.js`
-3. Open the `index.html` file using any modern web browser (Chrome, Safari, Edge, Firefox).
-4. You are ready to scan documents!
-
-*(Note: Modern browsers require a secure context (HTTPS or localhost) for the Camera API to work).*
-
-## 🤝 Contributing
-
-Contributions from the community are highly welcomed! Whether it's a bug fix, adding new features, or just improving the UI. Feel free to open an *Issue* or submit a *Pull Request*.
-
-## 📝 License
-
-This project is licensed under the [MIT License](LICENSE). You are free to use, modify, and distribute this software.
+You are free to use, modify, and distribute this software.
