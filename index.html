@@ -57,7 +57,6 @@
                 </div>
             </div>
 
-            <!-- FUNGSI BARU: Pilihan Susunan (Collage) -->
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Susunan (Collage):</label>
                 <select id="pdfLayoutSelect" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
@@ -68,12 +67,24 @@
                 </select>
             </div>
 
+            <!-- FUNGSI BARU: COP AIR DENGAN GAYA -->
+            <div class="mb-4 bg-gray-50 p-3 border border-gray-200 rounded-lg">
+                <label class="block text-sm font-bold text-gray-700 mb-2">🔒 Cop Air (Watermark):</label>
+                <input type="text" id="watermarkInput" placeholder="Cth: URUSAN BANK SAHAJA" class="w-full px-3 py-2 border border-blue-300 bg-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition mb-2 text-sm">
+                
+                <select id="watermarkStyleSelect" class="w-full px-3 py-2 border border-gray-300 bg-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-sm">
+                    <option value="center">Gaya: Tengah Bersilang (Lalai)</option>
+                    <option value="top-right">Gaya: Penjuru Kanan Atas</option>
+                    <option value="bottom-left">Gaya: Penjuru Kiri Bawah</option>
+                    <option value="tiled">Gaya: Penuh Berulang (Pattern)</option>
+                </select>
+            </div>
+
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Nama Fail PDF:</label>
                 <input type="text" id="fileNameInput" placeholder="Contoh: Resit_Klinik" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
             </div>
 
-            <!-- DUA BUTANG: PRATONTON & MUAT TURUN -->
             <div class="flex gap-2">
                 <button id="btnPreviewPdf" class="w-1/3 bg-gray-600 text-white font-bold py-3 rounded-lg hover:bg-gray-700 shadow-sm transition flex items-center justify-center">
                     👁️ Lihat
@@ -94,12 +105,9 @@
                 <h3 class="font-bold">📄 Pratonton PDF</h3>
                 <button onclick="closePdfPreviewModal()" class="text-gray-400 hover:text-red-500 font-bold text-xl">✕</button>
             </div>
-            
             <div class="flex-1 bg-white overflow-hidden relative">
-                <!-- iFrame untuk memaparkan PDF -->
                 <iframe id="pdfPreviewFrame" class="w-full h-full border-0"></iframe>
             </div>
-            
             <div class="p-4 bg-gray-800">
                 <button id="btnDownloadFromPreview" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 shadow-sm transition">
                     ⬇️ Muat Turun Sekarang
@@ -108,18 +116,16 @@
         </div>
     </div>
 
-    <!-- MODAL MANUAL CROP (UNTUK GALERI) -->
+    <!-- MODAL MANUAL CROP -->
     <div id="cropModal" class="fixed inset-0 z-[70] hidden bg-black bg-opacity-90 flex flex-col items-center justify-center p-4">
         <div class="w-full max-w-lg bg-gray-900 rounded-xl overflow-hidden flex flex-col" style="height: 85vh;">
             <div class="p-4 bg-gray-800 text-white flex justify-between items-center">
                 <h3 class="font-bold">✂️ Potong Gambar</h3>
                 <button onclick="closeCropModal()" class="text-gray-400 hover:text-red-500 font-bold text-xl">✕</button>
             </div>
-            
             <div class="flex-1 bg-black overflow-hidden flex items-center justify-center relative">
                 <img id="cropImageTarget" src="" class="max-w-full max-h-full block">
             </div>
-            
             <div class="p-4 bg-gray-800 flex gap-3">
                 <button onclick="closeCropModal()" class="px-4 py-3 bg-red-600 text-white rounded-lg font-bold w-1/3 hover:bg-red-700">Batal</button>
                 <button id="btnConfirmCrop" class="px-4 py-3 bg-green-600 text-white rounded-lg font-bold w-2/3 hover:bg-green-700">Sahkan & Proses</button>
@@ -127,7 +133,7 @@
         </div>
     </div>
 
-    <!-- MODAL KAMERA LANGSUNG (LIVE WEBCAM) -->
+    <!-- MODAL KAMERA LANGSUNG -->
     <div id="liveCameraModal" class="fixed inset-0 z-50 hidden bg-black flex flex-col items-center justify-center">
         <div class="relative w-full h-full max-w-md bg-black overflow-hidden flex flex-col justify-between">
             <div class="absolute top-0 left-0 w-full p-4 bg-gradient-to-b from-black to-transparent z-10 flex justify-center gap-2">
@@ -135,7 +141,6 @@
                 <button class="guide-btn bg-gray-700 text-white px-4 py-2 rounded-full text-sm font-bold shadow transition" data-type="resit">Resit</button>
                 <button class="guide-btn bg-gray-700 text-white px-4 py-2 rounded-full text-sm font-bold shadow transition" data-type="id">Kad IC</button>
             </div>
-
             <div class="relative flex-1 flex items-center justify-center overflow-hidden">
                 <video id="videoElement" class="absolute w-full h-full object-cover" autoplay playsinline></video>
                 <div id="cameraGuide" class="relative border-2 border-yellow-400 border-dashed rounded bg-yellow-400 bg-opacity-10 transition-all duration-300 ease-in-out pointer-events-none" style="aspect-ratio: 1 / 1.414; width: 85%;">
@@ -145,7 +150,6 @@
                     <div class="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-yellow-400"></div>
                 </div>
             </div>
-
             <div class="p-6 pb-10 flex gap-4 bg-gradient-to-t from-black to-transparent w-full justify-center z-10">
                 <button id="btnCloseCamera" class="px-6 py-4 bg-red-600 text-white rounded-full font-bold shadow-lg hover:bg-red-700">Batal</button>
                 <button id="btnCaptureFrame" class="px-8 py-4 bg-white text-black rounded-full font-bold shadow-[0_0_20px_rgba(255,255,255,0.7)] hover:bg-gray-200">📸 Tangkap</button>
@@ -153,44 +157,32 @@
         </div>
     </div>
 
-    <!-- MODAL EDIT GAMBAR (MANUAL ADJUSTMENT) -->
+    <!-- MODAL EDIT GAMBAR -->
     <div id="editModal" class="fixed inset-0 z-[60] hidden bg-black bg-opacity-80 flex items-center justify-center p-4">
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col">
             <div class="p-4 bg-gray-100 border-b flex justify-between items-center">
                 <h3 class="font-bold text-gray-800">🎨 Edit Gambar</h3>
                 <button onclick="closeEditModal()" class="text-gray-500 hover:text-red-500 font-bold text-xl">✕</button>
             </div>
-            
             <div class="p-4 flex-1 overflow-y-auto">
                 <div class="bg-gray-800 rounded-lg h-48 mb-6 flex items-center justify-center overflow-hidden relative shadow-inner">
                     <img id="editPreviewImage" class="max-h-full object-contain transition-all duration-75" src="">
                 </div>
-                
                 <div class="space-y-5 text-sm font-medium text-gray-700">
                     <div>
-                        <div class="flex justify-between mb-1">
-                            <label>Kecerahan (Brightness)</label>
-                            <span id="valBrightnessLabel" class="text-blue-600 font-bold">100%</span>
-                        </div>
+                        <div class="flex justify-between mb-1"><label>Kecerahan</label><span id="valBrightnessLabel" class="text-blue-600 font-bold">100%</span></div>
                         <input type="range" id="sliderBrightness" min="50" max="200" value="100" class="w-full accent-blue-600">
                     </div>
                     <div>
-                        <div class="flex justify-between mb-1">
-                            <label>Kontras (Contrast)</label>
-                            <span id="valContrastLabel" class="text-blue-600 font-bold">100%</span>
-                        </div>
+                        <div class="flex justify-between mb-1"><label>Kontras</label><span id="valContrastLabel" class="text-blue-600 font-bold">100%</span></div>
                         <input type="range" id="sliderContrast" min="50" max="250" value="100" class="w-full accent-blue-600">
                     </div>
                     <div>
-                        <div class="flex justify-between mb-1">
-                            <label>Warna (Saturation)</label>
-                            <span id="valSaturationLabel" class="text-blue-600 font-bold">100%</span>
-                        </div>
+                        <div class="flex justify-between mb-1"><label>Warna</label><span id="valSaturationLabel" class="text-blue-600 font-bold">100%</span></div>
                         <input type="range" id="sliderSaturation" min="0" max="200" value="100" class="w-full accent-blue-600">
                     </div>
                 </div>
             </div>
-            
             <div class="p-4 border-t flex gap-2 bg-gray-50">
                 <button onclick="resetEdits()" class="px-4 py-3 bg-gray-200 text-gray-800 rounded-lg font-bold w-1/3 hover:bg-gray-300 transition">Reset</button>
                 <button onclick="saveEdits()" class="px-4 py-3 bg-blue-600 text-white rounded-lg font-bold w-2/3 hover:bg-blue-700 transition shadow">Terapkan</button>
@@ -198,7 +190,7 @@
         </div>
     </div>
 
-    <!-- MODAL PAPARAN GAMBAR PENUH (VIEWER) -->
+    <!-- MODAL PAPARAN GAMBAR PENUH -->
     <div id="imageModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-80 flex items-center justify-center p-4">
         <div class="relative w-full max-w-2xl">
             <button onclick="closeImageModal()" class="absolute -top-4 -right-4 bg-red-500 text-white rounded-full w-10 h-10 flex items-center justify-center text-xl font-bold shadow-lg border-2 border-white hover:bg-red-600 transition z-50">✕</button>
@@ -209,7 +201,7 @@
     <script>
         let scannedImages = [];
         let readyPdfBlob = null; 
-        let currentPdfUrl = null; // Menyimpan URL PDF sementara
+        let currentPdfUrl = null; 
         let videoStream = null; 
         let currentEditIndex = null; 
         
@@ -220,6 +212,8 @@
         const btnOpenCamera = document.getElementById('btnOpenCamera');
         const autoEnhanceCheckbox = document.getElementById('autoEnhance');
         const pdfLayoutSelect = document.getElementById('pdfLayoutSelect');
+        const watermarkInput = document.getElementById('watermarkInput'); 
+        const watermarkStyleSelect = document.getElementById('watermarkStyleSelect'); // Elemen Dropdown Watermark
         
         const previewContainer = document.getElementById('previewContainer');
         const imageList = document.getElementById('imageList');
@@ -233,7 +227,6 @@
         const imageModal = document.getElementById('imageModal');
         const modalImage = document.getElementById('modalImage');
 
-        // Elemen Modal Pratonton PDF
         const pdfPreviewModal = document.getElementById('pdfPreviewModal');
         const pdfPreviewFrame = document.getElementById('pdfPreviewFrame');
         const btnDownloadFromPreview = document.getElementById('btnDownloadFromPreview');
@@ -248,9 +241,6 @@
         const sliderBrightness = document.getElementById('sliderBrightness');
         const sliderContrast = document.getElementById('sliderContrast');
         const sliderSaturation = document.getElementById('sliderSaturation');
-        const valBrightnessLabel = document.getElementById('valBrightnessLabel');
-        const valContrastLabel = document.getElementById('valContrastLabel');
-        const valSaturationLabel = document.getElementById('valSaturationLabel');
 
         const cropModal = document.getElementById('cropModal');
         const cropImageTarget = document.getElementById('cropImageTarget');
@@ -270,19 +260,19 @@
 
                 const type = e.target.dataset.type;
                 if (type === 'a4') {
-                    cameraGuide.style.aspectRatio = '1 / 1.414'; 
-                    cameraGuide.style.width = '85%';
+                    cameraGuide.style.aspectRatio = '1 / 1.414'; cameraGuide.style.width = '85%';
                 } else if (type === 'resit') {
-                    cameraGuide.style.aspectRatio = '1 / 2.5';   
-                    cameraGuide.style.width = '45%';
+                    cameraGuide.style.aspectRatio = '1 / 2.5'; cameraGuide.style.width = '45%';
                 } else if (type === 'id') {
-                    cameraGuide.style.aspectRatio = '1.58 / 1';  
-                    cameraGuide.style.width = '85%';
+                    cameraGuide.style.aspectRatio = '1.58 / 1'; cameraGuide.style.width = '85%';
                 }
             });
         });
 
+        // Trigger kalkulasi PDF jika susunan atau watermark bertukar
         pdfLayoutSelect.addEventListener('change', calculateActualPdfSize);
+        watermarkInput.addEventListener('change', calculateActualPdfSize); 
+        watermarkStyleSelect.addEventListener('change', calculateActualPdfSize);
 
         function formatBytes(bytes, decimals = 2) {
             if (!+bytes) return '0 Bytes';
@@ -297,20 +287,15 @@
             return new Promise((resolve) => {
                 const img = new Image();
                 const url = URL.createObjectURL(file);
-                
                 img.onload = () => {
                     const canvas = document.createElement('canvas');
-                    canvas.width = img.width;
-                    canvas.height = img.height;
+                    canvas.width = img.width; canvas.height = img.height;
                     const ctx = canvas.getContext('2d');
-
                     ctx.filter = 'grayscale(100%) contrast(160%) brightness(110%)';
                     ctx.drawImage(img, 0, 0);
-
                     canvas.toBlob((blob) => {
                         const enhancedFile = new File([blob], file.name, { type: 'image/jpeg' });
-                        URL.revokeObjectURL(url);
-                        resolve(enhancedFile);
+                        URL.revokeObjectURL(url); resolve(enhancedFile);
                     }, 'image/jpeg', 0.7); 
                 };
                 img.src = url;
@@ -319,46 +304,35 @@
 
         async function processImageFile(file) {
             loadingText.classList.remove('hidden');
-
             try {
                 let fileToProcess = file;
                 if (autoEnhanceCheckbox.checked) {
                     loadingText.innerText = "Meningkatkan kualiti teks...";
                     fileToProcess = await enhanceImage(file);
                 }
-
                 loadingText.innerText = "Memproses gambar...";
                 const options = { maxSizeMB: 1, maxWidthOrHeight: 1920, useWebWorker: true };
                 const compressedFile = await imageCompression(fileToProcess, options);
                 
                 const baseUrl = URL.createObjectURL(compressedFile);
                 const activeUrl = URL.createObjectURL(compressedFile);
-
                 const imgElement = new Image();
                 imgElement.src = baseUrl;
                 await new Promise((resolve) => { imgElement.onload = resolve; });
 
                 scannedImages.push({ 
-                    baseFile: compressedFile,                   
-                    baseUrl: baseUrl,                           
-                    file: compressedFile,                       
-                    url: activeUrl,                             
+                    baseFile: compressedFile, baseUrl: baseUrl, file: compressedFile, url: activeUrl,                             
                     fileName: file.name || `Gambar_${Date.now()}.jpg`,                        
-                    rawOriginalSize: file.size,                 
-                    rawCompressedSize: compressedFile.size,     
-                    originalSize: formatBytes(file.size),          
-                    compressedSize: formatBytes(compressedFile.size),
-                    imgWidth: imgElement.width, 
-                    imgHeight: imgElement.height,
+                    rawOriginalSize: file.size, rawCompressedSize: compressedFile.size,     
+                    originalSize: formatBytes(file.size), compressedSize: formatBytes(compressedFile.size),
+                    imgWidth: imgElement.width, imgHeight: imgElement.height,
                     filters: { brightness: 100, contrast: 100, saturation: 100 } 
                 });
                 renderImages();
             } catch (error) {
-                alert("Ralat memproses gambar.");
-                console.error(error);
+                alert("Ralat memproses gambar."); console.error(error);
             } finally {
-                loadingText.classList.add('hidden');
-                loadingText.innerText = "Sedang memproses..."; 
+                loadingText.classList.add('hidden'); loadingText.innerText = "Sedang memproses..."; 
             }
         }
 
@@ -367,151 +341,82 @@
             if (file) {
                 originalSelectedFilename = file.name;
                 const tempUrl = URL.createObjectURL(file);
-                
-                cropImageTarget.src = tempUrl;
-                cropModal.classList.remove('hidden');
-                
+                cropImageTarget.src = tempUrl; cropModal.classList.remove('hidden');
                 if (cropperInstance) { cropperInstance.destroy(); }
-                
-                setTimeout(() => {
-                    cropperInstance = new Cropper(cropImageTarget, {
-                        viewMode: 2, 
-                        autoCropArea: 0.9, 
-                        background: false
-                    });
-                }, 100); 
-                
+                setTimeout(() => { cropperInstance = new Cropper(cropImageTarget, { viewMode: 2, autoCropArea: 0.9, background: false }); }, 100); 
                 event.target.value = ''; 
             }
         });
 
         btnConfirmCrop.addEventListener('click', () => {
             if (!cropperInstance) return;
-            
-            const croppedCanvas = cropperInstance.getCroppedCanvas({
-                maxWidth: 4096, 
-                maxHeight: 4096,
-            });
-
+            const croppedCanvas = cropperInstance.getCroppedCanvas({ maxWidth: 4096, maxHeight: 4096 });
             croppedCanvas.toBlob((blob) => {
                 const croppedFile = new File([blob], originalSelectedFilename || `Crop_${Date.now()}.jpg`, { type: 'image/jpeg' });
-                processImageFile(croppedFile);
-                closeCropModal();
+                processImageFile(croppedFile); closeCropModal();
             }, 'image/jpeg', 0.95);
         });
 
         window.closeCropModal = function() {
             cropModal.classList.add('hidden');
-            if (cropperInstance) {
-                cropperInstance.destroy();
-                cropperInstance = null;
-            }
+            if (cropperInstance) { cropperInstance.destroy(); cropperInstance = null; }
             cropImageTarget.src = '';
         };
 
         btnOpenCamera.addEventListener('click', async () => {
             try {
-                const constraints = {
-                    video: { 
-                        facingMode: 'environment',
-                        width: { ideal: 1920 },  
-                        height: { ideal: 1080 }, 
-                        advanced: [{ focusMode: "continuous" }] 
-                    }
-                };
+                const constraints = { video: { facingMode: 'environment', width: { ideal: 1920 }, height: { ideal: 1080 }, advanced: [{ focusMode: "continuous" }] } };
                 videoStream = await navigator.mediaDevices.getUserMedia(constraints);
-                videoElement.srcObject = videoStream;
-                liveCameraModal.classList.remove('hidden');
-                
+                videoElement.srcObject = videoStream; liveCameraModal.classList.remove('hidden');
             } catch (err) {
                 try {
                     videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-                    videoElement.srcObject = videoStream;
-                    liveCameraModal.classList.remove('hidden');
-                } catch (fallbackErr) {
-                    alert("Gagal mengakses kamera. Pastikan browser anda membenarkan akses kamera.");
-                    console.error(fallbackErr);
-                }
+                    videoElement.srcObject = videoStream; liveCameraModal.classList.remove('hidden');
+                } catch (fallbackErr) { alert("Gagal mengakses kamera."); }
             }
         });
 
         function stopCamera() {
-            if (videoStream) {
-                videoStream.getTracks().forEach(track => track.stop());
-                videoStream = null;
-            }
+            if (videoStream) { videoStream.getTracks().forEach(track => track.stop()); videoStream = null; }
             liveCameraModal.classList.add('hidden');
         }
 
         btnCloseCamera.addEventListener('click', stopCamera);
 
         btnCaptureFrame.addEventListener('click', () => {
-            const videoWidth = videoElement.videoWidth;
-            const videoHeight = videoElement.videoHeight;
-            const videoRect = videoElement.getBoundingClientRect();
-            const guideRect = cameraGuide.getBoundingClientRect();
+            const videoRect = videoElement.getBoundingClientRect(); const guideRect = cameraGuide.getBoundingClientRect();
+            const scale = Math.max(videoRect.width / videoElement.videoWidth, videoRect.height / videoElement.videoHeight);
+            const offsetX = (videoElement.videoWidth * scale - videoRect.width) / 2;
+            const offsetY = (videoElement.videoHeight * scale - videoRect.height) / 2;
+            const cropX = (guideRect.left - videoRect.left + offsetX) / scale;
+            const cropY = (guideRect.top - videoRect.top + offsetY) / scale;
+            const cropWidth = guideRect.width / scale; const cropHeight = guideRect.height / scale;
 
-            const scale = Math.max(videoRect.width / videoWidth, videoRect.height / videoHeight);
-            const renderedWidth = videoWidth * scale;
-            const renderedHeight = videoHeight * scale;
-            const offsetX = (renderedWidth - videoRect.width) / 2;
-            const offsetY = (renderedHeight - videoRect.height) / 2;
-
-            const guideLeft = guideRect.left - videoRect.left;
-            const guideTop = guideRect.top - videoRect.top;
-
-            const cropX = (guideLeft + offsetX) / scale;
-            const cropY = (guideTop + offsetY) / scale;
-            const cropWidth = guideRect.width / scale;
-            const cropHeight = guideRect.height / scale;
-
-            const canvas = document.createElement('canvas');
-            canvas.width = cropWidth;
-            canvas.height = cropHeight;
+            const canvas = document.createElement('canvas'); canvas.width = cropWidth; canvas.height = cropHeight;
             const ctx = canvas.getContext('2d');
-            
             ctx.drawImage(videoElement, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
-            
             canvas.toBlob((blob) => {
-                if (blob) {
-                    const file = new File([blob], `Kamera_${Date.now()}.jpg`, { type: "image/jpeg" });
-                    processImageFile(file);
-                    stopCamera(); 
-                }
+                if (blob) { processImageFile(new File([blob], `Kamera_${Date.now()}.jpg`, { type: "image/jpeg" })); stopCamera(); }
             }, 'image/jpeg', 1.0); 
         });
 
         function renderImages() {
-            if (scannedImages.length > 0) {
-                previewContainer.classList.remove('hidden');
-            } else {
-                previewContainer.classList.add('hidden');
-                readyPdfBlob = null;
-                return;
-            }
+            if (scannedImages.length > 0) { previewContainer.classList.remove('hidden'); } 
+            else { previewContainer.classList.add('hidden'); readyPdfBlob = null; return; }
 
-            imageList.innerHTML = ''; 
-            let totalOrig = 0;
-            let totalComp = 0;
-
+            imageList.innerHTML = ''; let totalOrig = 0; let totalComp = 0;
             scannedImages.forEach((img, index) => {
-                totalOrig += img.rawOriginalSize;
-                totalComp += img.rawCompressedSize;
-
+                totalOrig += img.rawOriginalSize; totalComp += img.rawCompressedSize;
                 const imgDiv = document.createElement('div');
                 imgDiv.className = 'relative border rounded-lg overflow-hidden shadow-sm flex flex-col bg-gray-50';
-                
                 imgDiv.innerHTML = `
                     <div class="relative group cursor-pointer" onclick="openImageModal('${img.url}')">
                         <img src="${img.url}" class="w-full h-32 object-cover transition duration-300 group-hover:opacity-70">
                         <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 pointer-events-none">
                             <span class="bg-black bg-opacity-60 text-white text-xs px-3 py-1 rounded-full">🔍 Lihat</span>
                         </div>
-                        
-                        <button onclick="event.stopPropagation(); removeImage(${index})" class="absolute top-1 right-1 bg-red-500 hover:bg-red-600 transition text-white rounded-full w-7 h-7 flex items-center justify-center text-xs shadow z-10">✕</button>
-                        
-                        <button onclick="event.stopPropagation(); openEditModal(${index})" class="absolute top-1 right-9 bg-blue-500 hover:bg-blue-600 transition text-white rounded-full w-7 h-7 flex items-center justify-center text-xs shadow z-10">🎨</button>
-                        
+                        <button onclick="event.stopPropagation(); removeImage(${index})" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-7 h-7 flex items-center justify-center text-xs shadow z-10">✕</button>
+                        <button onclick="event.stopPropagation(); openEditModal(${index})" class="absolute top-1 right-9 bg-blue-500 text-white rounded-full w-7 h-7 flex items-center justify-center text-xs shadow z-10">🎨</button>
                         <div class="absolute top-1 left-1 bg-black bg-opacity-60 text-white text-xs px-2 py-0.5 rounded z-10">${index + 1}</div>
                     </div>
                     <div class="p-2 text-xs text-gray-700 flex flex-col gap-1 border-t">
@@ -522,242 +427,209 @@
                 `;
                 imageList.appendChild(imgDiv);
             });
-
-            document.getElementById('totalOriginal').innerText = formatBytes(totalOrig);
-            document.getElementById('totalCompressed').innerText = formatBytes(totalComp);
-            
+            document.getElementById('totalOriginal').innerText = formatBytes(totalOrig); document.getElementById('totalCompressed').innerText = formatBytes(totalComp);
             calculateActualPdfSize();
         }
 
-        window.removeImage = function(index) {
-            URL.revokeObjectURL(scannedImages[index].url); 
-            scannedImages.splice(index, 1);
-            renderImages();
-        };
+        window.removeImage = function(index) { URL.revokeObjectURL(scannedImages[index].url); scannedImages.splice(index, 1); renderImages(); };
 
         window.openEditModal = function(index) {
-            currentEditIndex = index;
-            const imgData = scannedImages[index];
-            
-            sliderBrightness.value = imgData.filters.brightness;
-            sliderContrast.value = imgData.filters.contrast;
-            sliderSaturation.value = imgData.filters.saturation;
-            
-            updateEditLabels();
-            
+            currentEditIndex = index; const imgData = scannedImages[index];
+            sliderBrightness.value = imgData.filters.brightness; sliderContrast.value = imgData.filters.contrast; sliderSaturation.value = imgData.filters.saturation;
+            document.getElementById('valBrightnessLabel').innerText = sliderBrightness.value + '%';
+            document.getElementById('valContrastLabel').innerText = sliderContrast.value + '%';
+            document.getElementById('valSaturationLabel').innerText = sliderSaturation.value + '%';
             editPreviewImage.src = imgData.baseUrl;
-            applyCssFilterToPreview();
-            
+            editPreviewImage.style.filter = `brightness(${sliderBrightness.value}%) contrast(${sliderContrast.value}%) saturate(${sliderSaturation.value}%)`;
             editModal.classList.remove('hidden');
         };
 
-        window.closeEditModal = function() {
-            editModal.classList.add('hidden');
-            currentEditIndex = null;
-        };
-
-        function updateEditLabels() {
-            valBrightnessLabel.innerText = sliderBrightness.value + '%';
-            valContrastLabel.innerText = sliderContrast.value + '%';
-            valSaturationLabel.innerText = sliderSaturation.value + '%';
-        }
-
-        function applyCssFilterToPreview() {
-            const b = sliderBrightness.value;
-            const c = sliderContrast.value;
-            const s = sliderSaturation.value;
-            editPreviewImage.style.filter = `brightness(${b}%) contrast(${c}%) saturate(${s}%)`;
-        }
+        window.closeEditModal = function() { editModal.classList.add('hidden'); currentEditIndex = null; };
 
         [sliderBrightness, sliderContrast, sliderSaturation].forEach(slider => {
             slider.addEventListener('input', () => {
-                updateEditLabels();
-                applyCssFilterToPreview();
+                document.getElementById('valBrightnessLabel').innerText = sliderBrightness.value + '%';
+                document.getElementById('valContrastLabel').innerText = sliderContrast.value + '%';
+                document.getElementById('valSaturationLabel').innerText = sliderSaturation.value + '%';
+                editPreviewImage.style.filter = `brightness(${sliderBrightness.value}%) contrast(${sliderContrast.value}%) saturate(${sliderSaturation.value}%)`;
             });
         });
 
-        window.resetEdits = function() {
-            sliderBrightness.value = 100;
-            sliderContrast.value = 100;
-            sliderSaturation.value = 100;
-            updateEditLabels();
-            applyCssFilterToPreview();
-        };
+        window.resetEdits = function() { sliderBrightness.value = 100; sliderContrast.value = 100; sliderSaturation.value = 100; sliderBrightness.dispatchEvent(new Event('input')); };
 
         window.saveEdits = async function() {
             if (currentEditIndex === null) return;
-            
-            const b = sliderBrightness.value;
-            const c = sliderContrast.value;
-            const s = sliderSaturation.value;
             const imgData = scannedImages[currentEditIndex];
-            
-            imgData.filters = { brightness: b, contrast: c, saturation: s };
-            
-            loadingText.innerText = "Menyimpan suntingan...";
-            loadingText.classList.remove('hidden');
-            editModal.classList.add('hidden');
-            
-            try {
+            imgData.filters = { brightness: sliderBrightness.value, contrast: sliderContrast.value, saturation: sliderSaturation.value };
+            loadingText.innerText = "Menyimpan suntingan..."; loadingText.classList.remove('hidden'); editModal.classList.add('hidden');
+            const img = new Image();
+            img.onload = async () => {
+                const canvas = document.createElement('canvas'); canvas.width = img.width; canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                ctx.filter = `brightness(${sliderBrightness.value}%) contrast(${sliderContrast.value}%) saturate(${sliderSaturation.value}%)`;
+                ctx.drawImage(img, 0, 0);
+                canvas.toBlob(async (blob) => {
+                    const finalCompressed = await imageCompression(new File([blob], imgData.fileName, { type: 'image/jpeg' }), { maxSizeMB: 1, maxWidthOrHeight: 1920, useWebWorker: true });
+                    URL.revokeObjectURL(imgData.url); 
+                    imgData.file = finalCompressed; imgData.url = URL.createObjectURL(finalCompressed);
+                    imgData.rawCompressedSize = finalCompressed.size; imgData.compressedSize = formatBytes(finalCompressed.size);
+                    loadingText.classList.add('hidden'); renderImages(); 
+                }, 'image/jpeg', 0.85); 
+            };
+            img.src = imgData.baseUrl; 
+        };
+
+        window.openImageModal = function(url) { modalImage.src = url; imageModal.classList.remove('hidden'); };
+        window.closeImageModal = function() { imageModal.classList.add('hidden'); setTimeout(() => { modalImage.src = ''; }, 300); };
+        imageModal.addEventListener('click', (e) => { if (e.target === imageModal) closeImageModal(); });
+
+        // --- FUNGSI WATERMARK GAYA RASMI MALAYSIA (DENGAN GARISAN) ---
+        async function applyWatermark(imageUrl, text, style) {
+            if (!text || text.trim() === "") return imageUrl; 
+
+            return new Promise((resolve) => {
                 const img = new Image();
-                img.onload = async () => {
+                img.onload = () => {
                     const canvas = document.createElement('canvas');
                     canvas.width = img.width;
                     canvas.height = img.height;
                     const ctx = canvas.getContext('2d');
-
-                    ctx.filter = `brightness(${b}%) contrast(${c}%) saturate(${s}%)`;
                     ctx.drawImage(img, 0, 0);
 
-                    canvas.toBlob(async (blob) => {
-                        const editedFile = new File([blob], imgData.fileName, { type: 'image/jpeg' });
+                    const watermarkText = text.trim();
+                    const fontSize = Math.max(30, img.width / 30);
+                    ctx.font = `bold ${fontSize}px sans-serif`;
+                    ctx.fillStyle = 'rgba(100, 100, 100, 0.5)';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+
+                    // Kira lebar teks untuk garisan
+                    const metrics = ctx.measureText(watermarkText);
+                    const textW = metrics.width;
+                    const linePadding = 20;
+
+                    ctx.save();
+
+                    // Fungsi untuk lukis teks + garisan atas & bawah
+                    const drawTextWithLines = (x, y, angle) => {
+                        ctx.save();
+                        ctx.translate(x, y);
+                        ctx.rotate(angle);
                         
-                        const options = { maxSizeMB: 1, maxWidthOrHeight: 1920, useWebWorker: true };
-                        const finalCompressed = await imageCompression(editedFile, options);
+                        // Lukis Teks
+                        ctx.fillText(watermarkText, 0, 0);
                         
-                        URL.revokeObjectURL(imgData.url); 
-                        const newUrl = URL.createObjectURL(finalCompressed);
+                        // Lukis Garisan Atas
+                        ctx.beginPath();
+                        ctx.moveTo(-textW / 2 - linePadding, -fontSize * 0.7);
+                        ctx.lineTo(textW / 2 + linePadding, -fontSize * 0.7);
+                        ctx.stroke();
                         
-                        imgData.file = finalCompressed;
-                        imgData.url = newUrl;
-                        imgData.rawCompressedSize = finalCompressed.size;
-                        imgData.compressedSize = formatBytes(finalCompressed.size);
+                        // Lukis Garisan Bawah
+                        ctx.beginPath();
+                        ctx.moveTo(-textW / 2 - linePadding, fontSize * 0.7);
+                        ctx.lineTo(textW / 2 + linePadding, fontSize * 0.7);
+                        ctx.stroke();
                         
-                        loadingText.classList.add('hidden');
-                        renderImages(); 
-                        
-                    }, 'image/jpeg', 0.85); 
+                        ctx.restore();
+                    };
+
+                    // Gaya Penjuru (Diagonal)
+                    if (style === 'top-right') {
+                        drawTextWithLines(canvas.width * 0.7, canvas.height * 0.2, -Math.PI / 4);
+                    } else if (style === 'bottom-left') {
+                        drawTextWithLines(canvas.width * 0.3, canvas.height * 0.8, -Math.PI / 4);
+                    } else if (style === 'tiled') {
+                        const stepX = textW + 150;
+                        const stepY = fontSize * 4;
+                        for(let x = -canvas.width; x < canvas.width * 2; x += stepX) {
+                            for(let y = -canvas.height; y < canvas.height * 2; y += stepY) {
+                                drawTextWithLines(x, y, -Math.PI / 4);
+                            }
+                        }
+                    } else { // Center
+                        drawTextWithLines(canvas.width / 2, canvas.height / 2, -Math.PI / 4);
+                    }
+
+                    ctx.restore();
+                    resolve(canvas.toDataURL('image/jpeg', 0.9));
                 };
-                img.src = imgData.baseUrl; 
-            } catch (error) {
-                console.error(error);
-                loadingText.classList.add('hidden');
-            }
-        };
-
-        window.openImageModal = function(imageUrl) {
-            modalImage.src = imageUrl;
-            imageModal.classList.remove('hidden');
-        };
-
-        window.closeImageModal = function() {
-            imageModal.classList.add('hidden');
-            setTimeout(() => { modalImage.src = ''; }, 300); 
-        };
-
-        imageModal.addEventListener('click', function(event) {
-            if (event.target === imageModal) closeImageModal();
-        });
-
+                img.src = imageUrl;
+            });
+        }
         // --- SISTEM KIRA PDF ---
         function calculateActualPdfSize() {
             if (scannedImages.length === 0) return;
 
             document.getElementById('finalPdfSize').innerText = "Mengira...";
-            btnPdf.innerText = "⏳ Memproses...";
-            btnPdf.disabled = true;
-            btnPdf.classList.add('opacity-70');
-            
-            btnPreviewPdf.disabled = true;
-            btnPreviewPdf.classList.add('opacity-70');
+            btnPdf.innerText = "⏳ Memproses..."; btnPdf.disabled = true; btnPdf.classList.add('opacity-70');
+            btnPreviewPdf.disabled = true; btnPreviewPdf.classList.add('opacity-70');
 
-            setTimeout(() => {
+            setTimeout(async () => {
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
                 
-                const pageWidth = pdf.internal.pageSize.getWidth();
-                const pageHeight = pdf.internal.pageSize.getHeight();
-                const margin = 15;  
-                const spacing = 10; 
+                const pageWidth = pdf.internal.pageSize.getWidth(); const pageHeight = pdf.internal.pageSize.getHeight();
+                const margin = 15; const spacing = 10; 
 
                 const layoutType = parseInt(pdfLayoutSelect.value);
                 let cols = 1, rows = 1;
+                if (layoutType === 2) { cols = 1; rows = 2; } else if (layoutType === 4) { cols = 2; rows = 2; } else if (layoutType === 6) { cols = 2; rows = 3; }
 
-                if (layoutType === 2) { cols = 1; rows = 2; }
-                else if (layoutType === 4) { cols = 2; rows = 2; }
-                else if (layoutType === 6) { cols = 2; rows = 3; }
+                const watermarkText = watermarkInput.value;
+                const watermarkStyle = watermarkStyleSelect.value; // Dapatkan gaya yang dipilih
 
                 for (let i = 0; i < scannedImages.length; i++) {
                     const positionOnPage = i % (cols * rows);
-                    
-                    if (positionOnPage === 0 && i > 0) {
-                        pdf.addPage();
-                    }
+                    if (positionOnPage === 0 && i > 0) pdf.addPage();
 
-                    const colIndex = positionOnPage % cols;
-                    const rowIndex = Math.floor(positionOnPage / cols);
-
+                    const colIndex = positionOnPage % cols; const rowIndex = Math.floor(positionOnPage / cols);
                     const cellWidth = (pageWidth - (margin * 2) - (spacing * (cols - 1))) / cols;
                     const cellHeight = (pageHeight - (margin * 2) - (spacing * (rows - 1))) / rows;
 
                     const cellX = margin + (colIndex * (cellWidth + spacing));
                     const cellY = margin + (rowIndex * (cellHeight + spacing));
 
-                    const imgWidth = scannedImages[i].imgWidth;
-                    const imgHeight = scannedImages[i].imgHeight;
-
+                    const imgWidth = scannedImages[i].imgWidth; const imgHeight = scannedImages[i].imgHeight;
                     const ratio = Math.min(cellWidth / imgWidth, cellHeight / imgHeight);
-                    const newWidth = imgWidth * ratio;
-                    const newHeight = imgHeight * ratio;
+                    const newWidth = imgWidth * ratio; const newHeight = imgHeight * ratio;
                     
                     const finalX = cellX + (cellWidth - newWidth) / 2;
                     const finalY = cellY + (cellHeight - newHeight) / 2;
 
-                    pdf.addImage(scannedImages[i].url, "JPEG", finalX, finalY, newWidth, newHeight);
+                    // Hantar gambar untuk dicop berserta gaya pilihan
+                    let finalImageUrl = await applyWatermark(scannedImages[i].url, watermarkText, watermarkStyle);
+
+                    pdf.addImage(finalImageUrl, "JPEG", finalX, finalY, newWidth, newHeight);
                 }
 
                 readyPdfBlob = pdf.output('blob');
-                
-                // Kemas kini URL PDF sementara (untuk fungsi pratonton)
-                if (currentPdfUrl) { URL.revokeObjectURL(currentPdfUrl); }
+                if (currentPdfUrl) URL.revokeObjectURL(currentPdfUrl); 
                 currentPdfUrl = URL.createObjectURL(readyPdfBlob);
                 
                 document.getElementById('finalPdfSize').innerText = formatBytes(readyPdfBlob.size);
-                
-                btnPdf.innerText = "⬇️ Muat Turun PDF";
-                btnPdf.disabled = false;
-                btnPdf.classList.remove('opacity-70');
-                
-                btnPreviewPdf.disabled = false;
-                btnPreviewPdf.classList.remove('opacity-70');
-                
+                btnPdf.innerText = "⬇️ Muat Turun PDF"; btnPdf.disabled = false; btnPdf.classList.remove('opacity-70');
+                btnPreviewPdf.disabled = false; btnPreviewPdf.classList.remove('opacity-70');
             }, 100); 
         }
 
-        // --- FUNGSI PRATONTON (PREVIEW PDF) ---
-        btnPreviewPdf.addEventListener('click', function() {
+        btnPreviewPdf.addEventListener('click', () => {
             if (!currentPdfUrl) return;
-            pdfPreviewFrame.src = currentPdfUrl;
-            pdfPreviewModal.classList.remove('hidden');
+            pdfPreviewFrame.src = currentPdfUrl; pdfPreviewModal.classList.remove('hidden');
         });
 
-        window.closePdfPreviewModal = function() {
-            pdfPreviewModal.classList.add('hidden');
-            pdfPreviewFrame.src = ''; // Bersihkan iframe untuk elak lambat
-        };
+        window.closePdfPreviewModal = function() { pdfPreviewModal.classList.add('hidden'); pdfPreviewFrame.src = ''; };
 
-        // --- FUNGSI MUAT TURUN PDF (Utama & Dari Preview) ---
         function executePdfDownload() {
             if (!currentPdfUrl) return;
-
-            let customFileName = fileNameInput.value.trim();
-            if (customFileName === "") customFileName = "Dokumen_Scan";
+            let customFileName = fileNameInput.value.trim() || "Dokumen_Scan";
             if (!customFileName.toLowerCase().endsWith('.pdf')) customFileName += ".pdf";
-
-            const a = document.createElement('a');
-            a.href = currentPdfUrl;
-            a.download = customFileName;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            const a = document.createElement('a'); a.href = currentPdfUrl; a.download = customFileName;
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
         }
 
         btnPdf.addEventListener('click', executePdfDownload);
-        
-        btnDownloadFromPreview.addEventListener('click', function() {
-            executePdfDownload();
-            closePdfPreviewModal(); // Tutup modal lepas muat turun
-        });
+        btnDownloadFromPreview.addEventListener('click', () => { executePdfDownload(); closePdfPreviewModal(); });
 
     </script>
 </body>
