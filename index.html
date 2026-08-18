@@ -15,6 +15,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 </head>
 <body class="bg-gray-100 min-h-screen p-2 md:p-6 font-sans">
+    <!-- NOTIFIKASI TOAST (POP-UP) BERJAYA MUAT TURUN -->
+    <div id="toastNotification" class="fixed top-6 left-1/2 transform -translate-x-1/2 z-[100] transition-all duration-300 -translate-y-24 opacity-0 pointer-events-none">
+        <div class="bg-gray-900 text-white px-5 py-3 rounded-full shadow-2xl flex items-center gap-3 font-bold text-sm border border-gray-700 backdrop-blur-md bg-opacity-90">
+            <span class="bg-green-500 text-white rounded-full p-1 shadow-inner">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg>
+            </span>
+            <span>PDF berjaya dimuat turun!</span>
+        </div>
+    </div> 
+    
     <div class="max-w-[1400px] mx-auto">
         <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 mb-6 flex items-center justify-center gap-3">
             <span class="text-3xl">📸</span>

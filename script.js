@@ -206,6 +206,17 @@ btnCaptureFrame.addEventListener('click', () => {
     canvas.toBlob((blob) => { if (blob) { processImageFile(new File([blob], `Kamera_${Date.now()}.jpg`, { type: "image/jpeg" })); stopCamera(); } }, 'image/jpeg', 1.0); 
 });
 
+// TOAST NOTIFICATION FUNCTION
+function showToast() {
+    const toast = document.getElementById('toastNotification');
+    toast.classList.remove('-translate-y-24', 'opacity-0');
+    toast.classList.add('translate-y-0', 'opacity-100');
+    setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('-translate-y-24', 'opacity-0');
+    }, 3500); // Hilang selepas 3.5 saat
+}
+
 function renderImages() {
     if (scannedImages.length > 0) { 
         previewContainer.classList.remove('hidden'); 
@@ -488,8 +499,19 @@ function calculateActualPdfSize() {
 
 btnPdf.addEventListener('click', () => {
     if (!currentPdfUrl) return;
+    
     let customFileName = fileNameInput.value.trim() || "Dokumen_Scan";
     if (!customFileName.toLowerCase().endsWith('.pdf')) customFileName += ".pdf";
-    const a = document.createElement('a'); a.href = currentPdfUrl; a.download = customFileName;
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    
+    const a = document.createElement('a'); 
+    a.href = currentPdfUrl; 
+    a.download = customFileName;
+    document.body.appendChild(a); 
+    a.click(); 
+    document.body.removeChild(a);
+    
+    // Panggil fungsi pop-up berjaya di sini
+    showToast();
 });
+
+
